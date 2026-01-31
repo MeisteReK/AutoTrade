@@ -1,0 +1,73 @@
+Sposób 1: Archiwum (najprostsze)
+Na starym komputerze:
+# Utwórz archiwum (Windows)
+
+cd C:\AutoTrade
+Compress-Archive -Path * -DestinationPath C:\AutoTrade-backup.zip
+
+
+Na nowym komputerze:
+# 1. Rozpakuj archiwum
+
+Expand-Archive -Path AutoTrade-backup.zip -DestinationPath C:\AutoTrade
+
+# 2. Przenieś bazę danych (jeśli chcesz zachować dane)
+
+cd C:\AutoTrade
+docker compose build --no-cache
+docker compose up -d
+
+
+# 4. Inicjalizuj bazę (jeśli nie przeniosłeś autotrade.sqlite)
+docker compose exec backend python init_db.py
+
+# 5. Utwórz admina
+
+docker compose exec backend python create_admin.py
+
+Wymagania na nowym komputerze
+
+Tylko Docker:
+Docker Desktop (Windows/Mac) lub Docker Engine (Linux)
+
+
+Bez Dockera (lokalnie):
+Python 3.8+
+Node.js 16+
+npm
+
+
+Uruchomienie lokalnie
+Lokalnie:
+
+# Backendcd backend
+python -m venv venv.\venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+
+# Frontendcd frontend
+npm install
+
+-----------------------------
+Aktywacja venv
+.\venv\Scripts\Activate.ps1
+-----------------------------
+
+
+Uruchomienie
+
+
+Skopiuj cały folder C:\AutoTrade na nowy kompute
+
+   docker compose build --no-cache
+   docker compose up -d
+
+Gdy zmienisz kod i chcesz zaktualizować Docker:
+docker compose down
+docker compose build --no-cache
+docker compose up -d
+
+Lub szybciej (jeśli zmieniłeś tylko kod, nie zależności):
+docker compose up -d --build
+
+Zatrzymaj kontenery, gdy skończysz:
+   docker compose down

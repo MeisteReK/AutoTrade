@@ -1,0 +1,30 @@
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info
+dist/
+build/
+.git/
+.gitignore
+.env
+*.log
+# Baza danych - będzie montowana jako volume
+*.sqlite
+*.sqlite3
+*.db
+# Modele - będą montowane jako volume
+models/*.pkl
+models/*.json
+# Pliki konfiguracyjne - będą montowane jako volume
+scraper_config.json
+update_status.json
+update_history.json
+scraper.log
+# Node modules (jeśli są)
+node_modules/
+

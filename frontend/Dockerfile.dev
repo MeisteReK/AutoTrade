@@ -1,0 +1,16 @@
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Kopiowanie package files
+COPY package*.json ./
+
+# Instalacja zależności
+RUN npm ci
+
+EXPOSE 5173
+
+# Vite dev server z hot reload
+# Kod będzie zamontowany jako volume, więc nie kopiujemy go tutaj
+CMD ["npm", "run", "dev", "--", "--host"]
+

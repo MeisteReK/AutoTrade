@@ -1,0 +1,36 @@
+# Baza danych
+*.sqlite
+*.db
+
+# Python
+__pycache__/
+*.pyc
+venv/
+env/
+
+# Node
+node_modules/
+dist/
+
+# Logi
+*.log
+
+# Konfiguracja (użytkownik tworzy własną)
+backend/scraper_config.json
+backend/update_status.json
+backend/update_history.json
+backend/.env
+frontend/.env
+
+# Duże CSV
+otomoto-webscrape/scraped_data/*.csv
+otomoto-webscrape/car_sale_ads*.csv
+backend/data/*.csv
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

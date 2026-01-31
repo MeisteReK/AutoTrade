@@ -1,0 +1,40 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: autotrade-backend-dev
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount całego kodu - zmiany widoczne od razu
+      - ./backend:/app
+      # Baza danych
+      - ./backend/autotrade.sqlite:/app/autotrade.sqlite
+      # Scraper directory - potrzebny do uruchamiania scrapera
+      # Używamy bezwzględnej ścieżki w kontenerze
+      - ./otomoto-webscrape:/otomoto-webscrape
+    environment:
+      - SECRET_KEY=dev-secret-key
+      - CORS_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: autotrade-frontend-dev
+    ports:
+      - "5173:5173"
+    volumes:
+      # Mount całego kodu - zmiany widoczne od razu
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    command: npm run dev -- --host
+    depends_on:
+      - backend
+    restart: unless-stopped
+

@@ -1,0 +1,47 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: autotrade-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      # Baza danych - przetrwa restart
+      - ./backend/autotrade.sqlite:/app/autotrade.sqlite
+      # Pliki konfiguracyjne scrapera
+      - ./backend/scraper_config.json:/app/scraper_config.json
+      - ./backend/update_status.json:/app/update_status.json
+      - ./backend/update_history.json:/app/update_history.json
+      - ./backend/scraper.log:/app/scraper.log
+      # Modele ML
+      - ./backend/models:/app/models
+      # Dane CSV (jeśli są)
+      - ./backend/data:/app/data
+      # Scraper directory - potrzebny do uruchamiania scrapera
+      # Używamy bezwzględnej ścieżki w kontenerze
+      - ./otomoto-webscrape:/otomoto-webscrape
+    environment:
+      - SECRET_KEY=${SECRET_KEY:-change-this-in-production}
+      - CORS_ORIGINS=http://localhost,http://127.0.0.1
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/docs"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=http://localhost:8000
+    container_name: autotrade-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+

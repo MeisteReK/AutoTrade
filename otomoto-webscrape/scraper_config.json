@@ -1,0 +1,14 @@
+{
+  "max_workers": 2,
+  "request_timeout": 15,
+  "delay_between_offers_min": 0.8,
+  "delay_between_offers_max": 1.5,
+  "delay_between_pages_min": 1.5,
+  "delay_between_pages_max": 3.0,
+  "max_offers_per_brand": 10,
+  "brands_to_scrape": [
+    "kia"
+  ],
+  "date_from": null,
+  "date_to": null
+}
