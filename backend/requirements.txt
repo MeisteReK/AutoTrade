@@ -1,20 +1,21 @@
-﻿fastapi==0.115.0
-uvicorn[standard]==0.30.6
-pydantic==2.9.2
-python-multipart==0.0.9
-pandas==2.2.2
-numpy==1.26.4
+# Aplikacja – minimalne wersje (>=) umożliwiają instalację na różnych wersjach Pythona, m.in. 3.11–3.14
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.6
+pydantic>=2.9.2
+python-multipart>=0.0.9
+pandas>=2.2.2
+numpy>=1.26.4
 scikit-learn>=1.3.0
-python-jose[cryptography]==3.3.0
-passlib[bcrypt]==1.7.4
-bcrypt==4.1.2
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+bcrypt>=4.1.2
 sqlalchemy>=2.0.45
-python-dotenv==1.0.0
-slowapi==0.1.9
-# Scraper dependencies
+python-dotenv>=1.0.0
+slowapi>=0.1.9
+# Scraper
 requests>=2.31.0
 beautifulsoup4>=4.12.0
-# Test dependencies
-pytest==8.3.3
-pytest-asyncio==0.24.0
-httpx==0.27.2
+# Testy
+pytest>=8.3.0
+pytest-asyncio>=0.24.0
+httpx>=0.27.0

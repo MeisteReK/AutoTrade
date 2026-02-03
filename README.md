@@ -19,7 +19,7 @@ cd AutoTrade
 ## Co jest potrzebne
 
 - Docker i Docker Compose (zalecane)
-- Lub Python 3.8+ i Node.js 16+ (dla lokalnej instalacji)
+- Lub Python 3.11+ (3.11, 3.12, 3.14 sprawdzone) i Node.js 16+ (dla lokalnej instalacji)
 
 ## Jak uruchomić
 
