@@ -1,4 +1,4 @@
-﻿from typing import Optional, List
+from typing import Optional, List
 from pathlib import Path
 import json
 import threading
@@ -944,7 +944,7 @@ def get_update_status(
     response = {
         **status,
         "is_running": status["status"] == "running",
-        "can_start_new": status["status"] in ["idle", "completed", "failed"]
+        "can_start_new": status["status"] in ["idle", "completed", "failed", "cancelled"]
     }
     
     # Oblicz czas trwania jeśli proces jest uruchomiony

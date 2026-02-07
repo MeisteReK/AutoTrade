@@ -49,18 +49,26 @@ export const DatabaseUpdate: React.FC = () => {
 
   useEffect(() => {
     if (token) {
-      // Polling statusu co 30 sekund
       fetchStatus();
       fetchHistory();
       fetchScraperConfig();
-      const interval = setInterval(() => {
-        fetchStatus();
-        fetchHistory();
-      }, 30000);
-
-      return () => clearInterval(interval);
     }
   }, [token]);
+
+  // Osobny polling z dynamicznym interwałem
+  useEffect(() => {
+    if (!token) return;
+
+    const pollInterval = status?.status === "running" ? 5000 : 30000; // 5s gdy działa, 30s gdy idle
+    const interval = setInterval(() => {
+      fetchStatus();
+      if (status?.status !== "running") {
+        fetchHistory();
+      }
+    }, pollInterval);
+
+    return () => clearInterval(interval);
+  }, [token, status?.status]);
 
   const fetchStatus = async () => {
     if (!token) return;
@@ -223,7 +231,7 @@ export const DatabaseUpdate: React.FC = () => {
         if (selectedOption === "scraping_and_update") {
           stepsToRun = ["scraping", "processing", "database_update"];
         } else if (selectedOption === "scraping_only") {
-          stepsToRun = ["scraping", "processing"];
+          stepsToRun = ["scraping"];
         }
         
         await axios.post(`${API_URL}/admin/database/full-update`, {
@@ -398,10 +406,59 @@ export const DatabaseUpdate: React.FC = () => {
       </div>
       )}
 
-      {/* Błędy */}
-      {(status.error_message || error) && (
+      {/* Podsumowanie po zakończeniu procesu */}
+      {status.status === "completed" && (
+        <div className="mb-6 p-4 bg-green-900/20 border border-green-700/50 rounded-lg">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-green-400 text-lg">✓</span>
+            <span className="text-green-400 font-semibold">Proces zakończony pomyślnie</span>
+          </div>
+          <div className="grid grid-cols-2 gap-2 text-xs text-slate-400">
+            {status.completed_at && (
+              <div><span className="font-medium">Zakończono:</span> {new Date(status.completed_at).toLocaleString("pl-PL", {day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'})}</div>
+            )}
+            {status.n_offers_scraped !== null && status.n_offers_scraped !== undefined && (
+              <div><span className="font-medium">Zescrapowane oferty:</span> {status.n_offers_scraped.toLocaleString("pl-PL")}</div>
+            )}
+            {status.steps_completed && status.steps_completed.length > 0 && (
+              <div className="col-span-2"><span className="font-medium">Wykonane etapy:</span> {status.steps_completed.map(s => getStepName(s)).join(", ")}</div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {status.status === "cancelled" && (
+        <div className="mb-6 p-4 bg-yellow-900/20 border border-yellow-700/50 rounded-lg">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-yellow-400 text-lg">⚠</span>
+            <span className="text-yellow-400 font-semibold">Proces został anulowany</span>
+          </div>
+          {status.completed_at && (
+            <div className="text-xs text-slate-400">
+              <span className="font-medium">Anulowano:</span> {new Date(status.completed_at).toLocaleString("pl-PL", {day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'})}
+            </div>
+          )}
+        </div>
+      )}
+
+      {status.status === "failed" && (
+        <div className="mb-6 p-4 bg-red-900/20 border border-red-700/50 rounded-lg">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-red-400 text-lg">✗</span>
+            <span className="text-red-400 font-semibold">Proces zakończony błędem</span>
+          </div>
+          {status.error_message && (
+            <div className="text-xs text-red-300 mt-1 break-words">
+              {status.error_message}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Błędy bieżące (z frontendu) */}
+      {error && (
         <div className="mb-4 p-3 bg-red-900/30 border border-red-700 rounded text-sm text-red-300">
-          <strong>Błąd:</strong> {status.error_message || error}
+          <strong>Błąd:</strong> {error}
         </div>
       )}
 

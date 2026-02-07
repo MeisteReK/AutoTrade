@@ -676,8 +676,8 @@ export const AnalyticsTab: React.FC<AnalyticsTabProps> = ({
                                     color: "#94a3b8",
                                     maxRotation: 45,
                                     minRotation: 0,
-                                    autoSkip: true,
-                                    maxTicksLimit: 10,
+                                    autoSkip: false,
+                                    maxTicksLimit: 15,
                                   },
                                   grid: {
                                     color: "rgba(148, 163, 184, 0.1)",
@@ -791,8 +791,8 @@ export const AnalyticsTab: React.FC<AnalyticsTabProps> = ({
                                     color: "#94a3b8",
                                     maxRotation: 45,
                                     minRotation: 0,
-                                    autoSkip: true,
-                                    maxTicksLimit: 10,
+                                    autoSkip: false,
+                                    maxTicksLimit: 15,
                                   },
                                   grid: {
                                     color: "rgba(148, 163, 184, 0.1)",

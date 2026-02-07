@@ -276,7 +276,7 @@ def run_full_update(start_step: str = "scraping", steps_to_run: Optional[List[st
             logger.info("=" * 60)
             
             status["current_step"] = "scraping"
-            status["progress_percent"] = 10
+            status["progress_percent"] = 5
             save_status(status)
             
             if not scraper_python.exists():
@@ -704,7 +704,7 @@ def run_full_update(start_step: str = "scraping", steps_to_run: Optional[List[st
                 status["n_offers_scraped"] = None
             
             status["steps_completed"].append("scraping")
-            status["progress_percent"] = 30
+            status["progress_percent"] = 70
             save_status(status)
             logger.info(f"Scraping completed. Logs saved to: {SCRAPER_LOG_FILE}")
         
@@ -720,7 +720,7 @@ def run_full_update(start_step: str = "scraping", steps_to_run: Optional[List[st
                 logger.info("=" * 60)
             
             status["current_step"] = "processing"
-            status["progress_percent"] = 40
+            status["progress_percent"] = 75
             save_status(status)
         
             result = subprocess.run(
@@ -741,7 +741,7 @@ def run_full_update(start_step: str = "scraping", steps_to_run: Optional[List[st
                 return status
             
             status["steps_completed"].append("processing")
-            status["progress_percent"] = 50
+            status["progress_percent"] = 80
             save_status(status)
             logger.info("Processing completed")
             
@@ -757,14 +757,14 @@ def run_full_update(start_step: str = "scraping", steps_to_run: Optional[List[st
                     raise FileNotFoundError(f"Source CSV not found: {SCRAPER_CSV}")
                 
                 status["current_step"] = "processing"
-                status["progress_percent"] = 55
+                status["progress_percent"] = 82
                 save_status(status)
                 
                 TARGET_CSV.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(SCRAPER_CSV, TARGET_CSV)
                 logger.info(f"CSV copied to: {TARGET_CSV}")
                 
-                status["progress_percent"] = 60
+                status["progress_percent"] = 85
                 save_status(status)
             except Exception as e:
                 logger.error(f"Error copying CSV file: {e}")
@@ -785,7 +785,7 @@ def run_full_update(start_step: str = "scraping", steps_to_run: Optional[List[st
                 logger.info("=" * 60)
             
             status["current_step"] = "database_update"
-            status["progress_percent"] = 80
+            status["progress_percent"] = 90
             save_status(status)
             
             result = subprocess.run(
@@ -816,6 +816,7 @@ def run_full_update(start_step: str = "scraping", steps_to_run: Optional[List[st
         # Sukces!
         status["status"] = "completed"
         status["current_step"] = None
+        status["progress_percent"] = 100
         status["completed_at"] = datetime.utcnow().isoformat()
         save_status(status)
         
